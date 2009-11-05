@@ -1,0 +1,53 @@
+/* @override 
+	http://localhost:8090/css/gather/screen.css
+	http://localhost:4000/css/gather.css
+*/
+
+body {
+	background-color: #333;
+}
+
+.container {
+	background-color: whitesmoke;
+	padding-left: 1pc;
+	padding-right: 1pc;
+    margin: 0 auto; 
+    padding: 0;
+	overflow: hidden;
+}
+
+#header {
+	width: 100%;
+	height: 5ex;
+	background: #e9c162 url(/images/sling-logo.png) no-repeat right top;
+}
+
+div#header ul {
+	height: 5ex;
+}
+
+#content {
+	padding-top: 4ex;
+	padding-bottom: 2ex;
+}
+
+#content pre {
+	margin-left: 8ex;
+}
+
+#content h1 {
+	
+}
+
+#footer {
+	background-color: #424242;
+	color: #e9c162;
+	min-height: 10ex;
+	margin: 0;
+	padding: 0;
+	border-top: 4px solid #e9c162;
+}
+
+#footer p {
+	text-align: center;
+}
