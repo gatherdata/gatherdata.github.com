@@ -29,6 +29,7 @@ div#header ul {
 #content {
 	padding-top: 4ex;
 	padding-bottom: 2ex;
+	padding-left: 1ex;
 }
 
 #content pre {
@@ -37,6 +38,18 @@ div#header ul {
 
 #content h1 {
 	
+}
+
+ul.splash {
+	display: block;
+	margin: 3ex 0 0;
+}
+
+ul.splash li {
+	list-style-type: none;
+	height: 72px;
+	color: #424242;
+	font: normal normal 12pt "Lucida Grande", Lucida, Verdana, sans-serif;
 }
 
 #footer {
