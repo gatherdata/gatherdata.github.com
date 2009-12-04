@@ -1,3 +1,8 @@
+---
+layout: default
+title: Developer Guide
+---
+
 Developer Guide
 ---------------
 
