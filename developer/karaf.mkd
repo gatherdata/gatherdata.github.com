@@ -1,0 +1,151 @@
+Apache Felix Karaf
+==================
+Apache Felix Karaf[1] is the OSGi runtime of choice for Gather 
+deployments.
+
+Karaf includes a shell environment for managing the runtime. In the
+following steps, unix-shell scripts will start with a '$' and Karaf
+shell scripts start with a '>'.
+
+Install Apache Karaf
+--------------------
+
+1. `$ cd /srv/gather`
+2. `$ sudo wget http://apache.cs.utah.edu/felix/apache-felix-karaf-1.4.0.tar.gz`
+3. `$ sudo tar xzf apache-felix-karaf-1.4.0.tar.gz`
+4. `$ sudo ln -s apache-felix-karaf-1.4.0 karaf`
+
+Install Service Wrapper
+-----------------------
+Karaf includes a linux initialization script wrapper that can be
+deployed, enabling it to start and stop as a system service.
+To install the service, follow these steps:
+
+1. `$ cd /srv/gather/karaf`
+2. `$ sudo ./bin/karaf`
+3. `> features:install wrapper`
+4. `> wrapper:install`
+5. `> shutdown`
+
+Then follow the instructions provided by the wrapper. If the wrapper
+script fails to start karaf, it is possible that the Java Service 
+Wrapper which was installed is wrong. The error complaint will be
+something like:
+
+    exec: 541: /srv/gather/apache-felix-karaf-1.4.0/bin/karaf-wrapper: not found
+
+Follow the instructions below to get the appropriate version and 
+replace the broken bits. 
+
+Also, the wrapper-service script attempts to place the data directory
+in the wrong place. Having the data directory somewhere outside of 
+karaf makes sense, though there is an open jira issue to enable that.
+For now, edit the karaf-service script:
+
+1. `vi /srv/gather/karaf/bin/karaf-service`
+2. Add a data directory variable to the top
+   
+   `
+    # Karaf data dir
+    $KARAF_DATA="/srv/gather/apache-felix-karaf-1.4.0/data"
+    `
+   
+3. Edit the start() function, using the `KARAF_DATA` variable
+   in place of the relative path to the data directory.
+
+  `
+        if [ ! -d $KARAF_DATA ]; then
+            mkdir $KARAF_DATA
+        fi
+        if [ ! -d $KARAF_DATA/log ]; then
+            mkdir $KARAF_DATA/log
+        fi
+  `
+
+Fix a broken karaf-wrapper
+--------------------------
+
+1. Download the correct Java Service Wrapper for you platform
+   * get the "Community Edition"
+   * download to a temp working area
+   * http://wrapper.tanukisoftware.org/doc/english/download.jsp
+   * `wget http://wrapper.tanukisoftware.org/download/3.3.9/wrapper-linux-x86-64-3.3.9.tar.gz`
+2. Expand the archive
+   * `tar xvzf wrapper-linux-x86-64-3.3.9.tar.gz`
+3. Copy the pieces into the karaf install
+   * `cd wrapper-linux-x86-64-3.3.9`
+   * `sudo cp ./bin/wrapper /srv/gather/karaf/bin/karaf-wrapper`
+   * `sudo cp ./lib/libwrapper.so /srv/gather/karaf/lib/`
+   * `sudo cp ./lib/wrapper.jar /srv/gather/karaf/lib/karaf-wrapper.jar`
+4. Try starting the service
+   * `sudo /usr/sbin/service karaf-service start`
+
+Create a client instance
+------------------------
+A client instance lets you log in to the karaf server shell. 
+You'll have to run karaf directly, create the instance, 
+restart it as a service, then run the client and ssh over
+to the server instance...
+
+1. `$ sudo ./bin/karaf`
+2. `> admin:create client`
+3. `> shutdown`
+4. `$ /etc/init.d/karaf-service start`
+5. `$ cd /srv/gather/karaf/instances/client/`
+6. `$ sudo ./bin/karaf client`
+7. `> ssh -p 8101 -l karaf -P karaf localhost`
+
+After ssh'ing to the server instance, notice that the karaf
+prompt has changed from `karaf@client` to `karaf@root`.
+When you're done, just `^d` to end your session. You'll return
+to the client, which you'll also end with a `^d`.
+
+Install GATHER Features
+-----------------------
+The configuration in etc specifies where to find the official GATHER
+repository, and a list of feature URLs to make available. Currently,
+the Apache Camel Karaf feature adds an old URL for Karaf Before doing
+any feature installs, remove that URL.
+
+1. `> features:removeUrl mvn:org.apache.felix.karaf/apache-felix-karaf/1.1.0-SNAPSHOT/xml/features`
+
+By default, the base features are:
+
+* ssh,management
+
+To these, add some base features:
+
+1. `> features:install http`
+2. `> features:install webconsole`
+3. `> features:install spring`
+4. `> features:install spring-dm`
+
+Then, add the GATHER features in this order:
+
+1. `> features:install google-peaberry`
+2. `> features:install gather-core`
+3. `> features:install gather-commons.db4o`
+   * for features that use [DB4O Persistence](http://www.db4o.com/)
+4. For features that use [EclipseLink JPA](http://www.eclipse.org/eclipselink/)
+   * `> features:install eclipselink`
+5. For JPA storage to [HSQLDB](http://hsqldb.org/)
+   * `> features:install gather-hsqldb`
+6. For JPA storage to [MySQL](http://www.mysql.com/)
+   * `> features:install gather-mysql`
+7. `> features:install gather-archiver.db4o`
+8. `> features:install gather-alert.all`
+9. `> features:install gather-forms.db4o`
+10. `> features:install gather-data.jpa`
+11. `> features:install camel-osgi`
+12. `> features:install gather-camel`
+13. `> features:install sling-dependencies`
+14. `> features:install sling-felix`
+15. `> features:install apache-sling`
+16. `> features:install gather-sling`
+
+References
+----------
+
+[1] http://felix.apache.org/site/apache-felix-karaf.html "Apache Felix Karaf"
+
+
