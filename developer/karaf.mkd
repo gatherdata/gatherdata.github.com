@@ -47,25 +47,22 @@ in the wrong place. Having the data directory somewhere outside of
 karaf makes sense, though there is an open jira issue to enable that.
 For now, edit the karaf-service script:
 
-1. `vi /srv/gather/karaf/bin/karaf-service`
+1. Edit the service script
+   * `vi /srv/gather/karaf/bin/karaf-service`
 2. Add a data directory variable to the top
    
-   `
     # Karaf data dir
     $KARAF_DATA="/srv/gather/apache-felix-karaf-1.4.0/data"
-    `
    
 3. Edit the start() function, using the `KARAF_DATA` variable
    in place of the relative path to the data directory.
 
-  `
-        if [ ! -d $KARAF_DATA ]; then
-            mkdir $KARAF_DATA
-        fi
-        if [ ! -d $KARAF_DATA/log ]; then
-            mkdir $KARAF_DATA/log
-        fi
-  `
+   if [ ! -d $KARAF_DATA ]; then
+       mkdir $KARAF_DATA
+   fi
+   if [ ! -d $KARAF_DATA/log ]; then
+       mkdir $KARAF_DATA/log
+   fi
 
 Fix a broken karaf-wrapper
 --------------------------
