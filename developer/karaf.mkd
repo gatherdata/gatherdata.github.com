@@ -1,3 +1,8 @@
+---
+layout: default
+title: Apache Felix Karaf
+---
+
 Apache Felix Karaf
 ==================
 Apache Felix Karaf[1] is the OSGi runtime of choice for Gather 
