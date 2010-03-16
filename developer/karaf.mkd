@@ -50,19 +50,30 @@ For now, edit the karaf-service script:
 1. Edit the service script
    * `vi /srv/gather/karaf/bin/karaf-service`
 2. Add a data directory variable to the top
-   
-    # Karaf data dir
-    $KARAF_DATA="/srv/gather/apache-felix-karaf-1.4.0/data"
-   
-3. Edit the start() function, using the `KARAF_DATA` variable
-   in place of the relative path to the data directory.
 
-   if [ ! -d $KARAF_DATA ]; then
-       mkdir $KARAF_DATA
-   fi
-   if [ ! -d $KARAF_DATA/log ]; then
-       mkdir $KARAF_DATA/log
-   fi
+    `$KARAF_DATA="/srv/gather/apache-felix-karaf-1.4.0/data"`
+
+3. Edit the start() function, using the `KARAF_DATA` variable
+   in place of the relative path to the data directory. 
+
+For the last step, change this...
+
+    if [ ! -d ../../data ]; then
+        mkdir ../../data
+    fi
+    if [ ! -d ../../data/log ]; then
+        mkdir ../../data/log
+    fi
+
+to this...
+
+    if [ ! -d $KARAF_DATA ]; then
+        mkdir $KARAF_DATA
+    fi
+    if [ ! -d $KARAF_DATA/log ]; then
+        mkdir $KARAF_DATA/log
+    fi
+
 
 Fix a broken karaf-wrapper
 --------------------------
@@ -92,7 +103,7 @@ to the server instance...
 1. `$ sudo ./bin/karaf`
 2. `> admin:create client`
 3. `> shutdown`
-4. `$ /etc/init.d/karaf-service start`
+4. `$ sudo service karaf-service start`
 5. `$ cd /srv/gather/karaf/instances/client/`
 6. `$ sudo ./bin/karaf client`
 7. `> ssh -p 8101 -l karaf -P karaf localhost`
@@ -102,25 +113,57 @@ prompt has changed from `karaf@client` to `karaf@root`.
 When you're done, just `^d` to end your session. You'll return
 to the client, which you'll also end with a `^d`.
 
+Customize Karaf
+---------------
+The configuration files in `/srv/gather/karaf/etc` need to
+be modified for GATHER. We'll download an artifact from the
+GATHER public repository, then expand it to overlay updated
+configuration.
+
+First, shutdown the karaf service and clean out the data directory:
+
+1. `$ cd /srv/gather/karaf`
+2. `$ sudo service karaf-service stop`
+3. `$ sudo rm -rf data/`
+
+Then get the custom configuration:
+
+1. `$ sudo wget http://repository.gatherdata.org/content/repositories/releases/org/gatherdata/gather-karaf/org.gatherdata.karaf.base/1.4.0/org.gatherdata.karaf.base-1.4.0-etc.tar.gz`
+2. `$ sudo tar xvzf org.gatherdata.karaf.base-1.4.0-etc.tar.gz`
+
+Restart karaf, log in and check the feature listing:
+
+1. `$ sudo service karaf-service start`
+2. `$ cd instances/client`
+3. `$ sudo ./bin/karaf client`
+4. `> ssh -p 8101 -l karaf -P karaf localhost`
+5. `> features:list`
+
+You should see a long listing of gather- and camel- features.
+The camel-karaf feature repository introduces an outdated 
+dependency on the karaf-1.1.0-SNAPSHOT repository. Remove
+that before continuing.
+
+* `> features:removeUrl mvn:org.apache.felix.karaf/apache-felix-karaf/1.1.0-SNAPSHOT/xml/features`
+
+GATHER expects two external web applications to be deployed:
+Orbeon Forms and Pentaho Reporting. Both must be deployed to
+Tomcat (or similar application server). The base urls must
+be adjusted in the file `etc/org.gatherdata.app.sling.cfg`.
+
 Install GATHER Features
 -----------------------
-The configuration in etc specifies where to find the official GATHER
-repository, and a list of feature URLs to make available. Currently,
-the Apache Camel Karaf feature adds an old URL for Karaf Before doing
-any feature installs, remove that URL.
-
-1. `> features:removeUrl mvn:org.apache.felix.karaf/apache-felix-karaf/1.1.0-SNAPSHOT/xml/features`
-
 By default, the base features are:
 
 * ssh,management
 
-To these, add some base features:
 
-1. `> features:install http`
-2. `> features:install webconsole`
-3. `> features:install spring`
-4. `> features:install spring-dm`
+To these, add these karaf features:
+
+1. `> features:install obr`
+2. `> features:install http`
+3. `> features:install webconsole`
+4. `> features:install spring`
 
 Then, add the GATHER features in this order:
 
@@ -128,26 +171,38 @@ Then, add the GATHER features in this order:
 2. `> features:install gather-core`
 3. `> features:install gather-commons.db4o`
    * for features that use [DB4O Persistence](http://www.db4o.com/)
-4. For features that use [EclipseLink JPA](http://www.eclipse.org/eclipselink/)
-   * `> features:install eclipselink`
-5. For JPA storage to [HSQLDB](http://hsqldb.org/)
-   * `> features:install gather-hsqldb`
-6. For JPA storage to [MySQL](http://www.mysql.com/)
-   * `> features:install gather-mysql`
+4. `> features:install eclipselink`
+   * For features that use [EclipseLink JPA](http://www.eclipse.org/eclipselink/)
+5. `> features:install gather-hsqldb`
+   * For JPA storage to [HSQLDB](http://hsqldb.org/)
+   * includes HSQLDB library and embedded server
+6. `> features:install gather-mysql`
+   * For JPA storage to [MySQL](http://www.mysql.com/)
+   * includes MySQL JDBC driver
 7. `> features:install gather-archiver.db4o`
+   * basic raw-data storage
 8. `> features:install gather-alert.all`
+   * alert service
 9. `> features:install gather-forms.db4o`
+   * support for orbeon forms publishing
 10. `> features:install gather-data.jpa`
+   * flexible data storage
 11. `> features:install camel-osgi`
+   * OSGi-friendly routing
 12. `> features:install gather-camel`
+   * gather common camel components 
 13. `> features:install sling-dependencies`
-14. `> features:install sling-felix`
+   * general dependencies for Apache Sling
+14. `> features:install sling-karaf`
+   * Karaf specific dependencies for Sling
 15. `> features:install apache-sling`
+   * Apache Sling framework
 16. `> features:install gather-sling`
+   * Gather Sling-based UI
 
 References
 ----------
 
 [1] http://felix.apache.org/site/apache-felix-karaf.html "Apache Felix Karaf"
-
+[2] http://sling.apache.org/site/index.html "Apache Sling"
 

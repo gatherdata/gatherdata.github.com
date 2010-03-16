@@ -29,6 +29,23 @@ Oracle's VirtualBox makes it easy to spin up Virtual Machines on demand.
    * "Tomcat Java server"
 7. Unmount the DVD image, reboot
 
+## Virtual Box Guest Utils
+
+For better integration with the Host OS, install
+the Virtual Box Guest Utils.
+
+1. `sudo apt-get install virtualbox-ose-guest-utils`
+2. `sudo apt-get install virtualbox-ose-guest-X11`
+
+Add a Shared Folder to the machine, reboot, then
+mount the shared folder:
+
+1. `mkdir host`
+2. `sudo mount -t vboxsf folder_name path_to_mount_point`
+
+Note that the folder name and mount directory should be
+different, otherwise `mount` may through a protocol complaint.
+
 ## Developer Tools
 
 1. Install Sun JDK[3]
