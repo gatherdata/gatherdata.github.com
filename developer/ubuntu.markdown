@@ -55,6 +55,8 @@ different, otherwise `mount` may through a protocol complaint.
    * `sudo apt-get install maven2`
 3. Install git[5]
    * `sudo apt-get install git-core`
+4. Instal tig (optional)
+   * `sudo apt-get intall tig`
 
 ## Get the Source
 
@@ -68,6 +70,38 @@ different, otherwise `mount` may through a protocol complaint.
    * `mvn pax:provision`
 5. Update from repository
    * `git pull`
+
+## Gather Features
+
+The Gather project source code is grouped into separate features,
+each of which is kept in its own repository.
+
+* gather-commons
+  * common models, parent classes and utilities
+  * wrapped 3rd party libraries 
+  * http://github.com/gatherdata/gather-commons
+* gather-archiver
+  * archival storage
+  * keeps raw data with metadata and SHA1 hash
+  * http://github.com/gatherdata/gather-archiver
+* gather-alert
+  * alert system
+  * applies scripted "rules" to incoming data
+  * send alert notifications 
+  * http://github.com/gatherdata/gather-alert
+* gather-camel
+  * message routing using Apache Camel
+  * will be merged into commons and individual features
+  * can be used for a "headless" gather server (no web ui)
+  * http://githhub.com/gatherdata/gather-camel
+* gather-data
+  * generic form data storage
+  * currently "single-bucket"
+  * dynamic tables will be available soon (merged from private branch)
+  * http://github.com/gatherdata/gather-data
+* gather-forms
+  * 
+* gather-sling 
 
 ## Application Servers
 
@@ -93,6 +127,6 @@ different, otherwise `mount` may through a protocol complaint.
  [3]: http://java.sun.com/javase/downloads/index.jsp "Sun JDK"
  [4]: http://maven.apache.org/ "Apache Maven"
  [5]: http://git-scm.com/ "Git SCM"
- [6]: https://github.com/ "GitHub"
+ [6]: https://github.com/gatherdata "GitHub"
 
 

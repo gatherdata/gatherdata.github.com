@@ -20,6 +20,24 @@ Install Apache Karaf
 3. `$ sudo tar xzf apache-felix-karaf-1.4.0.tar.gz`
 4. `$ sudo ln -s apache-felix-karaf-1.4.0 karaf`
 
+Configure Proxy Settings
+------------------------
+
+Karaf uses maven URLs for downloading jars from repositories. If your
+server uses an http proxy, then maven must also be configured to use 
+that proxy. 
+
+Edit the global maven settings.xml file, located at `/etc/maven2/settings.xml`
+and edit the proxy settings as indicated by 
+[Maven Proxy Settings](http://maven.apache.org/guides/mini/guide-proxies.html).
+
+Then, Karaf needs to be told where to find the global settings file. Edit
+the pax-url configuration located at `/srv/gather/karaf/etc/org.ops4j.pax.url.mvn.cfg`
+and set the value of `org.ops4j.pax.url.mvn.settings`. For Ubuntu, it would be:
+
+    org.ops4j.pax.url.mvn.settings=/etc/maven2/settings.xml
+
+
 Install Service Wrapper
 -----------------------
 Karaf includes a linux initialization script wrapper that can be
@@ -98,7 +116,11 @@ Create a client instance
 A client instance lets you log in to the karaf server shell. 
 You'll have to run karaf directly, create the instance, 
 restart it as a service, then run the client and ssh over
-to the server instance...
+to the server instance.
+
+If the server is already running as a linux service, first 
+stop it using `sudo /usr/sbin/service karaf-service start`.
+Then change to the `/srv/gather/karaf`
 
 1. `$ sudo ./bin/karaf`
 2. `> admin:create client`
@@ -130,6 +152,9 @@ Then get the custom configuration:
 
 1. `$ sudo wget http://repository.gatherdata.org/content/repositories/releases/org/gatherdata/gather-karaf/org.gatherdata.karaf.base/1.4.0/org.gatherdata.karaf.base-1.4.0-etc.tar.gz`
 2. `$ sudo tar xvzf org.gatherdata.karaf.base-1.4.0-etc.tar.gz`
+
+If you've already modified any of the configurations (perhaps
+for pax-url proxy settings) your changes may be lost. 
 
 Restart karaf, log in and check the feature listing:
 
