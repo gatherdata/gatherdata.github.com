@@ -1,0 +1,50 @@
+GATHER End to End
+=================
+
+Xforms are the central document handled by Gather. Users start
+by designing a form using Orbeon. The published form gets sent
+out to mobile phones, which submit xforms instance data back
+to the server for storage and reporting.
+
+## Orbeon Form Builder
+
+Gather integrates with Orbeon's Form Builder[1] to provide a
+web-based form editor.
+
+* web application deployed to Tomcat
+* embedded eXist database for form storage
+* "published" forms saved to Gather
+* form data is non-hierarchical (no repeating fields)
+
+### Orbeon-to-Gather
+
+Gather implements a web service interface which is 
+compatible with the eXist database. Orbeon is
+configured to use the Gather endpoints when publishing 
+a form that is ready for use.
+
+Published forms are available for download by mobile
+phones running the Gather Mobile client. They are transformed
+on the fly using an XSLT stylesheet. Not all XForms features
+are supported by the JavaRosa engine, so the forms should be
+tested before being made available for general users. 
+
+## GatherMobile
+
+GatherMobile is a J2ME application based on JavaRosa[3] which allows
+users to fill out forms using their mobile phone. The primary
+development environment is Windows.
+
+* J2ME
+* JavaRosa - open source mobile xforms application
+* Windows development environment
+* built-in and downloadable forms
+
+
+## References
+
+ [1]: http://www.orbeon.com "Orbeon Forms"
+
+ [2]: http://felix.apache.org/site/apache-felix-karaf.html "Apache Felix Karaf"
+
+ [3]: http://code.javarosa.org "JavaRosa"
