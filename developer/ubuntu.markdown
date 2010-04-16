@@ -55,6 +55,8 @@ different, otherwise `mount` may through a protocol complaint.
    * `sudo apt-get install maven2`
 3. Install git[5]
    * `sudo apt-get install git-core`
+3. Install ruby
+   * `sudo apt-get install ruby`
 
 ## Get the Source
 
