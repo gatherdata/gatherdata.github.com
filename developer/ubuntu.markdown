@@ -1,16 +1,27 @@
+---
+layout: default
+title: Ubuntu Developer Environment
+---
+
 Ubuntu Developer Environment
 ============================
 
 
 ## Ubuntu + VirtualBox
 
-Oracle's VirtualBox makes it easy to spin up Virtual Machines on demand.
+Oracle's VirtualBox makes it easy to spin up Virtual Machines on demand,
+giving you a perfect environment for developing and working with GATHERdata.
 
 1. Download, then install VirtualBox[1]
+   * get the version appropriate for your host platform
 2. Download Ubuntu Desktop[2] ISO image
+   * again, get the version appropriate for your host
 3. Create a new Virtual Machine
+   * Name: whatever-you-prefer
    * Operating System: Linux
    * Version: Ubuntu
+   * Memory: at least 1024MB
+   * Storage: dynamic expanding, at least 8GB
 4. Attach Ubuntu ISO to the VM
    1. Select the Virtual Machine
    2. Click "Settings"
@@ -22,31 +33,31 @@ Oracle's VirtualBox makes it easy to spin up Virtual Machines on demand.
    7. Browse to the Ubuntu ISO image, select it
    8. Click "OK" to dismiss the "Settings"
 5. Boot the VM, follow Ubuntu install instructions
-   * default settings are fine
-6. Select pre-configured software
-   * "LAMP server"
-   * "OpenSSH server"
-   * "Tomcat Java server"
-7. Unmount the DVD image, reboot
+   * default/recommended settings are fine
+   * enjoy the slideshow, or practice making origami cranes 
+6. Finished? Unmount the DVD image, reboot
 
 ## Virtual Box Guest Utils
 
 For better integration with the Host OS, install
-the Virtual Box Guest Utils.
+the Virtual Box Guest Utils. Open a terminal, then:
 
 1. `sudo apt-get install virtualbox-ose-guest-utils`
 2. `sudo apt-get install virtualbox-ose-guest-X11`
 
-Add a Shared Folder to the machine, reboot, then
-mount the shared folder:
+To add a Shared Folder to the machine: reboot, then
+mount the shared folder. Like this: 
 
 1. `mkdir host`
 2. `sudo mount -t vboxsf folder_name path_to_mount_point`
 
 Note that the folder name and mount directory should be
-different, otherwise `mount` may through a protocol complaint.
+different, otherwise `mount` may throw a protocol complaint.
 
 ## Developer Tools
+
+To build your own GATHERdata implementation, or to pitch in
+developing the common services, you'll need the following tools:
 
 1. Install Sun JDK[3]
    1. `sudo apt-get install sun-java6-bin sun-java6-jre sun-java6-jdk`
@@ -60,7 +71,14 @@ different, otherwise `mount` may through a protocol complaint.
 
 ## Get the Source
 
-1. Browse the gather project on GitHub[6]
+The project source code is currently broken up into a collection of
+"features" focused on providing various services, with each hosted in
+a separate repository. This will soon be refactored into a monolithic
+repository and a build system that produces multiple artifacts. 
+
+Until then you have to pull down each feature separately. For instance:
+
+1. Browse the GATHERdata project on GitHub[6]
 2. Clone a project
    * `git clone git://github.com/gatherdata/gather-commons.git`
 3. Build the project
@@ -100,8 +118,10 @@ each of which is kept in its own repository.
   * dynamic tables will be available soon (merged from private branch)
   * http://github.com/gatherdata/gather-data
 * gather-forms
-  * 
+  * support for Orbeon forms
+  * support for JavaRosa forms
 * gather-sling 
+  * Apache Sling web application framework
 
 ## Application Servers
 
@@ -118,6 +138,11 @@ each of which is kept in its own repository.
   3. `sudo cp /usr/share/doc/avahi-daemon/examples/ssh.service .`
 * TIG - ncurses based GIT repository browser
   * `sudo apt-get install tig`
+
+
+## GATHERmobile
+
+Interested in developing on the mobile phone side? Read up about [JavaRosa](/developer/javarosa.html).
 
 
 ## References
