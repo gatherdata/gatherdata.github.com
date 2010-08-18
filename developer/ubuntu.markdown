@@ -16,13 +16,14 @@ giving you a perfect environment for developing and working with GATHERdata.
    * get the version appropriate for your host platform
 2. Download Ubuntu Desktop[2] ISO image
    * again, get the version appropriate for your host
-3. Create a new Virtual Machine
+3. Launch VirtualBox
+4. Create a new Virtual Machine
    * Name: whatever-you-prefer
    * Operating System: Linux
    * Version: Ubuntu
    * Memory: at least 1024MB
    * Storage: dynamic expanding, at least 8GB
-4. Attach Ubuntu ISO to the VM
+5. Attach Ubuntu ISO to the VM
    1. Select the Virtual Machine
    2. Click "Settings"
    3. Go to "Storage" section
@@ -32,10 +33,10 @@ giving you a perfect environment for developing and working with GATHERdata.
    6. Click the "Add" icon
    7. Browse to the Ubuntu ISO image, select it
    8. Click "OK" to dismiss the "Settings"
-5. Boot the VM, follow Ubuntu install instructions
+6. Start the VM, follow Ubuntu install instructions
    * default/recommended settings are fine
    * enjoy the slideshow, or practice making origami cranes 
-6. Finished? Unmount the DVD image, reboot
+7. Finished? Unmount the DVD image, reboot
 
 ## Virtual Box Guest Utils
 
