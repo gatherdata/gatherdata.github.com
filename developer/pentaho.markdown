@@ -1,3 +1,9 @@
+---
+layout: default
+title: Pentaho Reporting
+---
+
+
 Pentaho Reporting
 =================
 

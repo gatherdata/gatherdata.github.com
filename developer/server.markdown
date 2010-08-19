@@ -1,3 +1,9 @@
+---
+layout: default
+title: Gather Server Applications
+---
+
+
 Gather Server Applications
 ==========================
 

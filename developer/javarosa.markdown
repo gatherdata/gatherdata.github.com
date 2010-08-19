@@ -1,3 +1,9 @@
+---
+layout: default
+title: JavaRosa Developer
+---
+
+
 JavaRosa Developer
 ==================
 These notes are Ubuntu variations for the steps
