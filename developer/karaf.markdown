@@ -71,7 +71,11 @@ For now, edit the karaf-service script:
 
     `$KARAF_DATA="/srv/gather/apache-felix-karaf-1.4.0/data"`
 
-3. Edit the start() function, using the `KARAF_DATA` variable
+3. Change the PIDDIR to use the data directory variable
+
+    `PIDDIR="$KARAF_DATA`
+
+4. Edit the start() function, using the `KARAF_DATA` variable
    in place of the relative path to the data directory. 
 
 For the last step, change this...
@@ -119,7 +123,7 @@ restart it as a service, then run the client and ssh over
 to the server instance.
 
 If the server is already running as a linux service, first 
-stop it using `sudo /usr/sbin/service karaf-service start`.
+stop it using `sudo /usr/sbin/service karaf-service stop`.
 Then change to the `/srv/gather/karaf`
 
 1. `$ sudo ./bin/karaf`
